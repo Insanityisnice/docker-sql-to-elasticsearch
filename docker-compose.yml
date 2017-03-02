@@ -1,0 +1,64 @@
+version: '2'
+services:
+  frag-elasticsearch1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    container_name: frag-elasticsearch1
+    environment:
+      - cluster.name=frag-search-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 1g
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  frag-elasticsearch2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    environment:
+      - cluster.name=frag-search-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=frag-elasticsearch1"
+      - "http.cors.enabled=true"
+      # Need to change this to the specific origin's that are allowed.
+      - "http.cors.allow-origin='*'"
+      - "http.cors.allow-headers=Authorization"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 1g
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - esdata2:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+  frag-elasticsearch-head:
+    image: mobz/elasticsearch-head:5
+    ports:
+      - 9100:9100
+
+volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
+
+networks:
+  esnet:
+    driver: bridge
