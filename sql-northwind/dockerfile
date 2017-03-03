@@ -23,8 +23,9 @@ RUN source ~/.bashrc
 
 # RUN /bin/bash -c "source ~/.bashrc"
 
+ENV LC_ALL C
 
 # Restore the backup file
-RUN LANG=C /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P pa$$w0rd -Q 'select * from sys.databases'
+RUN /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P pa$$w0rd -Q 'select * from sys.databases'
 
 # RUN /bin/bash "/opt/mssql-tools/bin/sqlcmd -U sa -P pa$$w0rd -Q ""RESTORE DATABASE Northwind FROM DISK='/tmp/Northwind.bak'"""
