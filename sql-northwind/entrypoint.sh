@@ -1,0 +1,1 @@
+/opt/mssql/bin/sqlservr.sh & /usr/src/app/restore-database.sh
