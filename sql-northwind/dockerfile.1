@@ -1,9 +1,12 @@
 FROM microsoft/mssql-server-linux:latest
 
-COPY Northwind.bak /tmp/
-
 ENV ACCEPT_EULA "Y"
 ENV SA_PASSWORD "pa$$w0rd"
+
+RUN /opt/mssql/bin/sqlservr.sh
+
+COPY Northwind.bak /tmp/
+
 
 # Install base packages
 RUN apt-get -y update \
@@ -17,15 +20,23 @@ RUN curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc
 RUN apt-get -y update
 RUN apt-get -y install mssql-tools unixodbc-dev
 
+RUN locale-gen en_US
+RUN locale-gen en_US.UTF-8
+
+RUN update-locale
+
 RUN rm /bin/sh && ln -sf /bin/bash /bin/sh
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
-RUN source ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc_profile
+# RUN source ~/.bashrc
 
 # RUN /bin/bash -c "source ~/.bashrc"
 
-ENV LC_ALL C
+# RUN systemctl status mssql-server
 
 # Restore the backup file
-RUN /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P pa$$w0rd -Q 'select * from sys.databases'
+RUN /opt/mssql-tools/bin/sqlcmd -U sa -P pa$$w0rd -Q 'select * from sys.databases'
+
 
 # RUN /bin/bash "/opt/mssql-tools/bin/sqlcmd -U sa -P pa$$w0rd -Q ""RESTORE DATABASE Northwind FROM DISK='/tmp/Northwind.bak'"""
+
+
