@@ -2,7 +2,7 @@
 
 # ENV SQLSERVER_NAME
 # ENV SQLSERVER_USER
-# ENV SQLSERVER_PWD
+# ENV SQLSERVER_PASS
 # ENV ELASTICSEARCH_NAME
 
 # Install base packages
@@ -18,6 +18,6 @@ RUN apt-get remove -y wget \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY logstash-sql.conf /bin/logstash/logstash.conf
+COPY logstash.conf /bin/logstash/
 
 CMD ["-f", "/bin/logstash/logstash.conf"]

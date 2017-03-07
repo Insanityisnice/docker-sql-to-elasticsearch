@@ -69,7 +69,7 @@ curl -XPOST -u elastic 'localhost:9200/_xpack/security/role/events_admin' -d '{
     }
   ]
 }'
-
+http
 curl -XPOST -u elastic 'localhost:9200/_xpack/security/user/johndoe' -d '{
   "password" : "pa$$w0rd",
   "full_name" : "John Doe",

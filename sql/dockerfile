@@ -2,6 +2,7 @@ FROM microsoft/mssql-server-linux:latest
 
 # Set this so that it skips prompting you during the mssql-tools package install
 ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Turk3yT1m3
 
 # Install curl inorder to get the microsoft packages
 RUN apt-get -y update \
@@ -32,4 +33,6 @@ COPY Northwind.bak /tmp/
 # Grant permissions for the import-data script to be executable
 RUN chmod +x /usr/src/sql/restore-database.sh
 
-CMD /bin/bash ./entrypoint.sh
+RUN /bin/bash ./entrypoint.sh
+
+CMD /opt/mssql/bin/sqlservr.sh
