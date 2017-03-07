@@ -18,10 +18,10 @@ services:
       - cluster.name=frag-search-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.zen.ping.unicast.hosts=frag-elasticsearch1
       - "http.cors.enabled=true"
-      # Need to change this to the specific origin's that are allowed.
-      - "http.cors.allow-origin='*'"
-      - "http.cors.allow-headers=Authorization"
+      - "http.cors.allow-origin=*"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
@@ -45,7 +45,10 @@ services:
       - cluster.name=frag-search-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=frag-elasticsearch1"
+      - discovery.zen.ping.unicast.hosts=frag-elasticsearch1
+      - "http.cors.enabled=true"
+      - "http.cors.allow-origin=*"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
@@ -68,9 +71,6 @@ services:
   frag-logstash:
     container_name: frag-logstash
     build: ./logstash
-    depends_on:
-      - frag-sql
-      - frag-elasticsearch1
     environment:
       - SQLSERVER_NAME=frag-sql
       - SQLSERVER_USER=sa

@@ -43,6 +43,7 @@ From the project directory run
 * https://github.com/jprante/elasticsearch-jdbc
 * https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 * https://github.com/elastic/elasticsearch
+* https://github.com/logstash-plugins/logstash-input-jdbc
 
 
 curl -XPUT -u elastic 'localhost:9200/_xpack/security/user/elastic/_password' -d '{
