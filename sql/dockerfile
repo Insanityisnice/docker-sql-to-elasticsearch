@@ -19,17 +19,17 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 RUN locale-gen en_US.UTF-8 \
  && update-locale
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/sql
+WORKDIR /usr/src/sql
 
 # Copy files used during startup
-COPY restore-database.sh /usr/src/app/
-COPY entrypoint.sh /usr/src/app/
-COPY startup.sql /usr/src/app/
+COPY restore-database.sh /usr/src/sql/
+COPY entrypoint.sh /usr/src/sql/
+COPY setup.sql /usr/src/sql/
 
 COPY Northwind.bak /tmp/
 
 # Grant permissions for the import-data script to be executable
-RUN chmod +x /usr/src/app/restore-database.sh
+RUN chmod +x /usr/src/sql/restore-database.sh
 
-CMD /usr/src/app/entrypoint.sh
+CMD /bin/bash ./entrypoint.sh
