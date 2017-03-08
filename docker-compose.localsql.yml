@@ -1,5 +1,16 @@
 version: '2'
 services:
+  frag-sql:
+    container_name: frag-sql
+    build: ./sql
+    environment: 
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Turk3yT1m3
+    ports:
+      - 1433:1433
+    volumes:
+      - sqldata:/var/opt/mssql
+    stdin_open: true
   frag-elasticsearch1:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
     container_name: frag-elasticsearch1
@@ -61,15 +72,17 @@ services:
     container_name: frag-logstash
     build: ./logstash
     environment:
-      - SQLSERVER_NAME=IMSSQLDev-01
-      - SQLSERVER_USER=JStackhouse
-      - SQLSERVER_PASS=jiK4yDbZWy
-      - ELASTICSEARCH_NAME=10.3.254.111
+      - SQLSERVER_NAME=frag-sql
+      - SQLSERVER_USER=sa
+      - SQLSERVER_PASS=Turk3yT1m3
+      - ELASTICSEARCH_NAME=192.168.1.2
 
 volumes:
   esdata1:
     driver: local
   esdata2:
+    driver: local
+  sqldata:
     driver: local
 
 networks:

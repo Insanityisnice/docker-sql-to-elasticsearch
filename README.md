@@ -45,61 +45,10 @@ From the project directory run
 * https://github.com/elastic/elasticsearch
 * https://github.com/logstash-plugins/logstash-input-jdbc
 
-
-curl -XPUT -u elastic 'localhost:9200/_xpack/security/user/elastic/_password' -d '{
-  "password" : "pa$$w0rd"
-}'
-
-curl -XPUT -u elastic 'localhost:9200/_xpack/security/user/kibana/_password' -d '{
-  "password" : "pa$$w0rd"
-}'
-
-curl -XPUT -u elastic 'localhost:9200/_xpack/security/user/logstash_system/_password' -d '{
-  "password" : "pa$$w0rd"
-}'
-
-curl -XPOST -u elastic 'localhost:9200/_xpack/security/role/events_admin' -d '{
-  "indices" : [
-    {
-      "names" : [ "events*" ],
-      "privileges" : [ "all" ]
-    },
-    {
-      "names" : [ ".kibana*" ],
-      "privileges" : [ "manage", "read", "index" ]
+{
+  "query": {
+    "regexp": {
+      "email_address": ".+?ahmed.*?"
     }
-  ]
-}'
-http
-curl -XPOST -u elastic 'localhost:9200/_xpack/security/user/johndoe' -d '{
-  "password" : "pa$$w0rd",
-  "full_name" : "John Doe",
-  "email" : "john.doe@anony.mous",
-  "roles" : [ "events_admin" ]
-}'
-
-
-
-# tests
-curl -u elastic -XPUT 'http://localhost:9200/twitter/user/kimchy?pretty' -H 'Content-Type: application/json' -d '{ "name" : "Shay Banon" }'
-
-curl -u elastic -XPUT 'http://localhost:9200/twitter/tweet/1?pretty' -H 'Content-Type: application/json' -d '
-{
-    "user": "kimchy",
-    "post_date": "2009-11-15T13:12:00",
-    "message": "Trying out Elasticsearch, so far so good?"
-}'
-
-curl -u elastic -XPUT 'http://localhost:9200/twitter/tweet/2?pretty' -H 'Content-Type: application/json' -d '
-{
-    "user": "kimchy",
-    "post_date": "2009-11-15T14:12:12",
-    "message": "Another tweet, will it be indexed?"
-}'
-
-curl -u elastic -XGET 'http://localhost:9200/twitter/user/kimchy?pretty=true'
-curl -u elastic -XGET 'http://localhost:9200/twitter/tweet/1?pretty=true'
-curl -u elastic -XGET 'http://localhost:9200/twitter/tweet/2?pretty=true'
-
-
-curl -u elastic -XGET 'http://localhost:9200/twitter/tweet/_search?q=user:kimchy&pretty=true'
+  }
+}

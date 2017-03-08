@@ -1,0 +1,5 @@
+SELECT pea.PERSON_ID,
+       e.ADDRESS AS EMAIL_ADDRESS
+FROM [IMS].[dbo].[EMAIL] as e
+JOIN [IMS].[dbo].[PERSON_EMAIL_ASSOCIATION] as pea ON e.EMAIL_ID = pea.EMAIL_ID
+WHERE e.[STAMP_DATE] > :sql_last_value
