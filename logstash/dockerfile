@@ -1,9 +1,14 @@
- FROM logstash:5
+
+# The official logstash image throws errors when running apt-get.
+FROM docker.elastic.co/logstash/logstash:5.2.2
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
 # ENV SQLSERVER_NAME
 # ENV SQLSERVER_USER
 # ENV SQLSERVER_PASS
-# ENV ELASTICSEARCH_NAME
+# ENV ELASTICSEARCH_URL
+
+USER root
 
 # Install base packages
 RUN apt-get -y update \
@@ -18,9 +23,11 @@ RUN apt-get remove -y wget \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY logstash.conf /bin/logstash/
+COPY pipeline/ /usr/share/logstash/pipeline/
+COPY config/ /usr/share/logstash/config/
 
-RUN mkdir -p /usr/src/sql/
 COPY ./sql/*.sql /usr/src/sql/
 
-CMD ["-f", "/bin/logstash/logstash.conf"]
+USER logstash
+
+CMD ["logstash", "-f", "/usr/share/logstash/pipeline/"]

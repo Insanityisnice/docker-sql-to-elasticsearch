@@ -1,54 +1,57 @@
-# Elastic Search Example using Logstash
+# Example of pulling data from sql into Elastic Search using Logstash
+In this example we use the 5.2.2 version of elasticsearch and logstash to pull data from sql server.  I put together this example because I could not find everything in one pace and wanted to keep an example around for future reference.
+
+# Tools
+## Required
+* [docker](https://www.docker.com/)
+
+## Optional 
+* [vscode](https://code.visualstudio.com)
+
+# References
+* [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* [Logstash](https://www.elastic.co/guide/en/logstash/current/index.html)
+* [Kibana](https://www.elastic.co/guide/en/kibana/current/index.html)
+* [Elasticsearch-head](https://github.com/mobz/elasticsearch-head)
+* [Elastic Guides](https://www.elastic.co/guide/index.html)
 
 # Running the Example
-
-## Start the cluster
+## Starting the example
 From the project directry run
 > docker-compose up
 
 ### Checking the health of the cluster
-
 #### Bash
-> curl -u elastic http://localhost:9200/_cat/health
+> curl -u elastic:changeme http://localhost:9200/_cat/health
 
 #### Powershell
-
 ```Powershell
-$user = "user"
-$pass= "password"
+$user = "elastic"
+$pass= "changeme"
 $secpasswd = ConvertTo-SecureString $pass -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($user, $secpasswd)
-Invoke-WebRequest -Credential elastic -URI http://localhost:9200/_cat/health
+Invoke-WebRequest -Credential credential -URI http://localhost:9200/_cat/health
 ```
-
 #### elasticsearch-head web dashboard
-
-> http://localhost:9100/?auth_user=elastic&auth_password=changeme
+Browse to the following uri and connect to an elastic node
+> http://localhost:9100
 
 More information can be found at https://github.com/mobz/elasticsearch-head
+
+#### Kibana
+Browse to the following uri
+> http://http://localhost:5601
 
 ## Stoping the cluster
 From the project directory run
 > docker-compose stop
 
 ### Remove the containers
+From the project directory run
 > docker-compose down
 
+### Clean up the data volumes
+NOTE: This will delete all volumes that are no longer referenced.  Run this command at your own risk.
 
-# IGNORE Just notes
-## References
-
-* http://blog.tabulaw.com/2015/08/elasticsearch-and-ms-sql-server-would.html
-* http://blog.comperiosearch.com/blog/2014/01/30/elasticsearch-indexing-sql-databases-the-easy-way/
-* https://github.com/jprante/elasticsearch-jdbc
-* https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
-* https://github.com/elastic/elasticsearch
-* https://github.com/logstash-plugins/logstash-input-jdbc
-
-{
-  "query": {
-    "regexp": {
-      "email_address": ".+?ahmed.*?"
-    }
-  }
-}
+From the commandline
+> docker volume prune

@@ -1,11 +1,19 @@
-# Logstash Setup
+# Logstash
+It was necessary to add to the base logstash container and install the sql jdbc driver in order to connect to a sql database and pull data.
+
+## Configuration
+Put configuration files in the config folder and they will be built into the logstash container.
+
+## Pipelines
+The logstash.conf file contains the pipeline for pulling the data from sql using the jdbc driver.
+
+### Points of interest
+* Set the tracking column in order to only pull new or updated values in the sql query.
+    * For northwind there is not timestamp column so just using the identity column to determine what to pull.
+* Set the last_run_metadata_path for each input
+
 ## Scheduling
 https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html#_scheduling
 
-# NOTES - Commands for reference only
-### Running SQL Container
-docker run -i -e ACCEPT_EULA=Y -e SA_PASSWORD=Turk3yT1m3 -p 1433:1433 -d  microsoft/mssql-server-linux
-
-### Running Logstash
-docker build . --tag logstash-test
-docker run --rm -it -e SQLSERVER_NAME=192.168.1.2 logstash-test
+## Lessons Learned
+* Add logical prefixs to the indexs, this allows easier filtering in the monitoring tools

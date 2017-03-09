@@ -1,3 +1,17 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+    "mssql.connections": [
+        {
+            "server": "localhost",
+            "database": "master",
+            "authenticationType": "SqlLogin",
+            "user": "sa",
+            "password": "",
+            "savePassword": true,
+            "profileName": "docker-sql",
+            "connectTimeout": 15,
+            "encrypt": false,
+            "applicationName": "vscode-mssql"
+        }
+    ]
 }
