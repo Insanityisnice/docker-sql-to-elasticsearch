@@ -55,3 +55,7 @@ NOTE: This will delete all volumes that are no longer referenced.  Run this comm
 
 From the commandline
 > docker volume prune
+
+## Known Issues
+* ERROR: This machine must have at least 3.25 gigabytes of memory to install
+    * You may experience this error from the sql container.  To correct this error open the docker settings, under the advanced tab, ensure that the memory is at least 3.25 GB.
